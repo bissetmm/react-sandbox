@@ -1,0 +1,36 @@
+.wrapper {
+  max-width: 1170px;
+  margin: 0 auto;
+}
+
+.topContainer {
+  //
+  height: auto;
+  display: flex;
+  justify-content: space-evenly;
+
+  label {
+    width: 108px;
+    height: 108px;
+    position: relative;
+
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    button{
+      position: absolute;
+      background-color: #000;
+      width: 20px;
+      height: 20px;
+      color: #fff;
+      border-radius: 50%;
+      top: 6px;
+      right: 6px;
+    }
+  }
+}
+
+

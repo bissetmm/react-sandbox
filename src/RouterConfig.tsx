@@ -4,6 +4,7 @@ import App from "./App";
 import PageA from "./components/PageA";
 import PageB from "./components/PageB";
 import Index from "./components/BookSearch/Index";
+import Photo from "./components/PhotoRanking/index";
 
 export const RouterConfig:React.VFC = () =>{
   return(
@@ -14,6 +15,7 @@ export const RouterConfig:React.VFC = () =>{
         <Route path="pageA" element={<PageA />} />
         <Route path="pageB" element={<PageB />} />
         <Route path='books' element={<Index/>}/>
+        <Route path="photo" element={<Photo/>}/>
       </Routes>
     </BrowserRouter>
     </>
