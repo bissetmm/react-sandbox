@@ -4,14 +4,14 @@ import styles from "./style.module.scss";
 
 type PhotosUploadProps = {
   name: string;
-  componentRef?: (instance: HTMLInputElement | null) => void;
+  //componentRef?: (instance: HTMLInputElement | null) => void;
   photos: File[];
   setPhotos: (files: File[]) => void;
 };
 
 const PhotosUpload = ({
   name,
-  componentRef,
+  //componentRef,
   photos,
   setPhotos,
 }: PhotosUploadProps) => {
@@ -25,7 +25,11 @@ const PhotosUpload = ({
     setIsFileTypeError(false);
   };
 
-  const fileUpload = () => {};
+  const componentRef = useRef(null);
+
+  const fileUpload = () => {
+    componentRef.current.click();
+  };
 
   const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files === null || event.target.files.length === 0) {
@@ -120,6 +124,7 @@ const PhotosUpload = ({
         </div>
         <label htmlFor={name}>
           <div></div>
+          <button onClick={fileUpload}>ファイルアップロード</button>
           <input
             type="file"
             name={name}
@@ -128,6 +133,7 @@ const PhotosUpload = ({
             accept="image/*"
             onChange={handleFile}
             multiple
+            hidden
           />
         </label>
       </div>
