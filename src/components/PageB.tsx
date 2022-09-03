@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { render } from "react-dom";
 
 const PageB = () => {
   const inputRef = useRef(null);

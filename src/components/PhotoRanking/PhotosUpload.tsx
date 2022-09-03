@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import PhotoSample from "./PhotoSample";
 import styles from "./style.module.scss";
+import {Button, ImageList} from '@mui/material';
 
 type PhotosUploadProps = {
   name: string;
@@ -70,7 +71,7 @@ const PhotosUpload = ({
     if (concatPhotos.length >= 4) {
       setIsNumberError(true);
     }
-    setPhotos(concatPhotos.slice(0, 3));
+    setPhotos(concatPhotos.slice(0, 6));
   };
 
   const handleCancel = (photoIndex: number) => {
@@ -86,23 +87,21 @@ const PhotosUpload = ({
   return (
     <>
       <div className={styles.topContainer}>
-        {[...Array(3)].map((_: number, index: number) =>
+        {[...Array(6)].map((_: number, index: number) =>
           index < photos.length ? (
-            <>
-              <label htmlFor="">
-                <img
-                  src={URL.createObjectURL(photos[index])}
-                  alt={`あなたの写真 ${index + 1}`}
-                />
-                <button
-                  type="button"
-                  key={index}
-                  onClick={() => handleCancel(index)}
-                >
-                  X
-                </button>
-              </label>
-            </>
+            <label htmlFor="" key={index + 1}>
+              <img
+                src={URL.createObjectURL(photos[index])}
+                alt={`あなたの写真 ${index + 1}`}
+              />
+              <button
+                type="button"
+                key={index}
+                onClick={() => handleCancel(index)}
+              >
+                X
+              </button>
+            </label>
           ) : (
             <label htmlFor={name} key={index}>
               <div>
@@ -113,19 +112,21 @@ const PhotosUpload = ({
         )}
       </div>
       {isSameError && <p>*すでに選択された画像ぞ同じものは表示されません。</p>}
-      {isNumberError && <p>*３枚を超えて選択された画像は表示されません。</p>}
+      {isNumberError && <p>*6枚を超えて選択された画像は表示されません。</p>}
       {isFileTypeError && (
         <p>*jpeg,png,bmp,gif,svg以外のファイル形式は表示されません。</p>
       )}
 
       <div>
         <div>
-          <p>※最大3枚まで</p>
+          <p>※最大6枚まで</p>
         </div>
         <label htmlFor={name}>
           <div></div>
-          <button onClick={fileUpload}>ファイルアップロード</button>
-          <input
+          <Button variant="contained" disableRipple component="label">
+      ファイルアップロード
+      
+            <input
             type="file"
             name={name}
             id={name}
@@ -135,6 +136,9 @@ const PhotosUpload = ({
             multiple
             hidden
           />
+          </Button>
+
+          
         </label>
       </div>
     </>
