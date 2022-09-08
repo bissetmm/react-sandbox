@@ -45,7 +45,7 @@ const index = () => {
 
     const compressOptions = {
       maxSizeMB: 0.8, //最大ファイルサイズ
-      maxWidthOrHeight: 600, //最大縦横値
+      maxWidthOrHeight: 495, //最大縦横値
     };
 
     const compressedPhotoData = await Promise.all(
