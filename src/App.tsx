@@ -2,6 +2,12 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.scss';
 
+// const express = require("express");
+// const cors = require('cors');
+// const app = express();
+
+//app.use(cors());
+
 function App() {
   return (
     <div className="App">

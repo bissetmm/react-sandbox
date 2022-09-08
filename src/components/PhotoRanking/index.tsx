@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+//import axios from "axios";
 import imageCompression from "browser-image-compression";
 import PhotosUpload from "./PhotosUpload";
 
@@ -10,6 +11,8 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { TextField, Button, Grid } from "@mui/material";
+
+import Draw from "../Canvas/draw";
 
 type Inputs = {
   email: string;
@@ -23,10 +26,10 @@ const index = () => {
   });
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [photos, setPhotos] = useState<File[]>([]);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [compPhotos, setCompPhotos] = useState<File[]>([]);
 
-  console.log(compPhotos);
+  const [maxSize,setMaxSize] = useState(0);
+  //console.log(compPhotos);
 
   const onSubmit = async (data: Inputs): Promise<void> => {
     const { email, phone } = data;
@@ -44,21 +47,37 @@ const index = () => {
       maxSizeMB: 0.8, //最大ファイルサイズ
       maxWidthOrHeight: 600, //最大縦横値
     };
+
     const compressedPhotoData = await Promise.all(
       photos.map(async (photo) => {
+        //最大縦横値を算出
+        const reader = new FileReader();
+        reader.readAsDataURL(photo);
+
+        reader.onload = () => {
+          const img = new Image();
+          img.src = reader.result.toString();
+          img.decode().then(() => {
+            //ここはサブルーチン化
+            let imgWidth = img.width,
+              imgHeight = img.height,
+              imgRate = imgWidth / imgHeight;
+
+            console.log(imgRate);
+          });
+        };
+
         return {
           blob: await imageCompression(photo, compressOptions),
           name: photo.name,
         };
       })
     );
-    const array:File[] = [];
+    const array: File[] = [];
     compressedPhotoData.forEach((photoData) => {
       array.push(new File([photoData.blob], photoData.name));
     });
     setCompPhotos(array);
-
-    
 
     /*
     axios({
@@ -85,9 +104,7 @@ const index = () => {
       <Container maxWidth="sm">
         <Box>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={1}>
-              {/* <input id="email" {...register("email", { required: "*" })} />
-            <input id="phone" {...register("phone")} /> */}
+            <Stack spacing={1} display="none">
               <TextField label="email" type="email" {...register("email")} />
               <TextField label="Phone" type="tel" {...register("phone")} />
             </Stack>
@@ -110,6 +127,8 @@ const index = () => {
           </form>
         </Box>
       </Container>
+
+      <Draw photos={compPhotos} />
     </>
   );
 };

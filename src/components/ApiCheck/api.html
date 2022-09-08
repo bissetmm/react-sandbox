@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>サンプル</title>
+</head>
+
+<body>
+  ​
+  <p>サンプルページです。</p>
+  ​
+  <div>
+    <input type="file" id="fileBox" multiple>
+  </div>
+  ​
+  <div>
+    <input type="button" value="Check" id="checkButton">
+  </div>
+  ​
+  <script>
+    function butotnClick() {
+      console.log('value: ' + fileBox.value);​
+      
+    }​
+    let fileBox = document.getElementById('fileBox');​
+    let checkButton = document.getElementById('checkButton');
+
+    checkButton.addEventListener('click', butotnClick);
+  </script>
+  ​
+</body>
+
+</html>

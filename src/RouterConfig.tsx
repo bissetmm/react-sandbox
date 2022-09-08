@@ -5,6 +5,8 @@ import PageA from "./components/PageA";
 import PageB from "./components/PageB";
 import Index from "./components/BookSearch/Index";
 import Photo from "./components/PhotoRanking/index";
+import ApiTest from "./components/ApiCheck/index";
+import Canvas from "./components/Canvas/draw";
 
 export const RouterConfig:React.VFC = () =>{
   return(
@@ -16,6 +18,7 @@ export const RouterConfig:React.VFC = () =>{
         <Route path="pageB" element={<PageB />} />
         <Route path='books' element={<Index/>}/>
         <Route path="photo" element={<Photo/>}/>
+        <Route path="api" element={<ApiTest/>}/>
       </Routes>
     </BrowserRouter>
     </>
