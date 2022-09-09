@@ -13,6 +13,8 @@ import Stack from "@mui/material/Stack";
 import { TextField, Button, Grid } from "@mui/material";
 
 import Draw from "../Canvas/draw";
+import { resolve } from "path";
+import { InputGroup } from "react-bootstrap";
 
 type Inputs = {
   email: string;
@@ -27,14 +29,13 @@ const index = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [photos, setPhotos] = useState<File[]>([]);
   const [compPhotos, setCompPhotos] = useState<File[]>([]);
-
-  const [maxSize,setMaxSize] = useState(0);
-  //console.log(compPhotos);
+  const [centerShift_x, setCenterShift_x] = useState(0);
+  const [centerShift_y, setCenterShift_y] = useState(0);
 
   const onSubmit = async (data: Inputs): Promise<void> => {
     const { email, phone } = data;
     if (email === "" && phone === "" && photos.length === 0) {
-      // アンケートフォームが空の場合はPOSTしない
+      // フォームが空の場合はPOSTしない
       return;
     }
 
@@ -43,28 +44,53 @@ const index = () => {
     formData.append("email", email);
     formData.append("phone", phone);
 
-    const compressOptions = {
-      maxSizeMB: 0.8, //最大ファイルサイズ
-      maxWidthOrHeight: 495, //最大縦横値
+    // const compressOptions = {
+    //   maxSizeMB: 0.8, //最大ファイルサイズ
+    //   maxWidthOrHeight: maxSize, //最大縦横値
+    // };
+
+    const imageSize = async (file) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+
+        img.onload = () => {
+          const size = {
+            width: img.naturalWidth,
+            height: img.naturalHeight,
+          };
+
+          URL.revokeObjectURL(img.src);
+          resolve(size);
+        };
+
+        img.onerror = (error) => {
+          reject(error);
+        };
+
+        img.src = URL.createObjectURL(file);
+      });
     };
 
     const compressedPhotoData = await Promise.all(
       photos.map(async (photo) => {
-        //最大縦横値を算出
-        const reader = new FileReader();
-        reader.readAsDataURL(photo);
+        const size = await imageSize(photo);
+        //console.log("w:%f h:%f", size["width"], size["height"]);
 
-        reader.onload = () => {
-          const img = new Image();
-          img.src = reader.result.toString();
-          img.decode().then(() => {
-            //ここはサブルーチン化
-            let imgWidth = img.width,
-              imgHeight = img.height,
-              imgRate = imgWidth / imgHeight;
+        const ratio = size["width"] / size["height"];
+        //let maxSize = ratio < 1 ? 330 / ratio : 330 * ratio;
+        let maxSize = 330;
 
-            console.log(imgRate);
-          });
+        if (ratio < 1) {
+          maxSize = 330 / ratio;
+          //setCenterShift_y((size["height"] - size["width"]) / 2);
+        } else {
+          maxSize = 330 * ratio;
+          //setCenterShift_x((size["width"] - size["height"]) / 2);
+        }
+
+        const compressOptions = {
+          maxSizeMB: 0.8, //最大ファイルサイズ
+          maxWidthOrHeight: maxSize, //最大縦横値
         };
 
         return {
@@ -73,7 +99,9 @@ const index = () => {
         };
       })
     );
+
     const array: File[] = [];
+
     compressedPhotoData.forEach((photoData) => {
       array.push(new File([photoData.blob], photoData.name));
     });
@@ -128,7 +156,9 @@ const index = () => {
         </Box>
       </Container>
 
-      <Draw photos={compPhotos} />
+      <Draw
+        photos={compPhotos}
+      />
     </>
   );
 };

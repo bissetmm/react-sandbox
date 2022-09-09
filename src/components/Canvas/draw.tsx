@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { FiberNew } from "@mui/icons-material";
+import { height } from "@mui/system";
 import { read } from "fs";
 import React, { useEffect, useRef } from "react";
 import "./Canvas.css";
@@ -15,8 +16,6 @@ const draw = (props: drawProps) => {
     const canvas: any = canvasRef.current;
     return canvas.getContext("2d");
   };
-
-  //console.log(props.photos);
 
   useEffect(() => {
     const ctx = getContext();
@@ -42,12 +41,21 @@ const draw = (props: drawProps) => {
               let imgWidth = img.width,
                 imgHeight = img.height,
                 imgRate = imgWidth / imgHeight;
+              const shift_x = (imgWidth - 330) / 2;
+              const shift_y = (imgHeight - 330) / 2;
 
-              let hRatio = 330 / img.width,
-                vRatio = 330 / img.height,
-                ratio = Math.min(hRatio, vRatio),
-                centerShift_x = (330 - img.width * ratio) / 2,
-                centerShift_y = (330 - img.height * ratio) / 2;
+              console.log(
+                "width:%n height:%n ratio:%n",
+                imgWidth,
+                imgHeight,
+                imgRate
+              );
+
+              // let hRatio = 330 / img.width,
+              //   vRatio = 330 / img.height,
+              //   ratio = Math.min(hRatio, vRatio),
+              //   centerShift_x = (330 - img.width * ratio) / 2,
+              //   centerShift_y = (330 - img.height * ratio) / 2;
               //ctx.clearRect(0, 0, 330, 330);
               //ctx.rect(23 + j * 352, 35 + i * 680, 330, 330);
               //ctx.arc( 100, 100, 80, 0 * Math.PI / 180, 360 * Math.PI / 180 ) ;
@@ -65,10 +73,11 @@ const draw = (props: drawProps) => {
               //   img.width * Math.max(hRatio, vRatio),
               //   img.height * Math.max(hRatio, vRatio)
               // );
+
               ctx.drawImage(
                 img,
-                0,
-                0,
+                shift_x,
+                shift_y,
                 330,
                 330,
                 23 + 351 * j,
