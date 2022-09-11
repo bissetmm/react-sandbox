@@ -63,7 +63,7 @@ const index = () => {
         onChange={(e) => handleSetImage(e)}
       />
 
-      <Button variant="contained" onClick={submitPost}>
+      <Button variant="contained" onClick={submitPost} fullWidth={true}>
         Create Post
       </Button>
     </div>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 //import axios from "axios";
 import imageCompression from "browser-image-compression";
@@ -12,9 +12,12 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { TextField, Button, Grid } from "@mui/material";
 
-import Draw from "../Canvas/draw";
+import Draw from "../Canvas/drawEffect";
 import { resolve } from "path";
 import { InputGroup } from "react-bootstrap";
+import { saveAs } from "file-saver";
+
+import {useCanvasDraw} from '../../app/useCnavasDraw'
 
 type Inputs = {
   email: string;
@@ -22,6 +25,7 @@ type Inputs = {
 };
 
 const index = () => {
+  const DrawRef = useRef();
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { register, handleSubmit } = useForm<Inputs>({
     mode: "onBlur",
@@ -29,8 +33,11 @@ const index = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [photos, setPhotos] = useState<File[]>([]);
   const [compPhotos, setCompPhotos] = useState<File[]>([]);
-  const [centerShift_x, setCenterShift_x] = useState(0);
-  const [centerShift_y, setCenterShift_y] = useState(0);
+  const [canvasUrl, setCanvasUrl] = useState<string>("");
+
+  const canvas = useCanvasDraw(compPhotos);
+
+  console.log(canvas);
 
   const onSubmit = async (data: Inputs): Promise<void> => {
     const { email, phone } = data;
@@ -127,6 +134,11 @@ const index = () => {
       */
   };
 
+  const handleDl = () => {
+    console.log(canvasUrl);
+    saveAs(canvasUrl,'canvas.jpg');
+  }
+
   return (
     <>
       <Container maxWidth="sm">
@@ -150,15 +162,19 @@ const index = () => {
                 <Button variant="contained" fullWidth={true} type="submit">
                   Submit
                 </Button>
+                
+                {/* <img src={`${process.env.PUBLIC_URL}/img/img_rank_1.svg`} alt="" height={76} /> */}
+
+                <Button variant="contained" fullWidth={true} type="button" onClick={handleDl}>
+                  Canvas DL
+                </Button>
               </Grid>
             </Grid>
           </form>
         </Box>
       </Container>
 
-      <Draw
-        photos={compPhotos}
-      />
+      <Draw photos={compPhotos} />
     </>
   );
 };

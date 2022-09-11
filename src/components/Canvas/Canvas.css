@@ -47,5 +47,6 @@ button:active {
 }
 
 .canvas{
-  
+  display:flex;
+  justify-content: center;
 }

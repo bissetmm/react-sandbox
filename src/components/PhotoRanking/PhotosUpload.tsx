@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import PhotoSample from "./PhotoSample";
 import styles from "./style.module.scss";
-import {Button, ImageList} from '@mui/material';
+import { Button, ImageList } from "@mui/material";
 
 type PhotosUploadProps = {
   name: string;
@@ -12,7 +12,6 @@ type PhotosUploadProps = {
 
 const PhotosUpload = ({
   name,
-  //componentRef,
   photos,
   setPhotos,
 }: PhotosUploadProps) => {
@@ -124,21 +123,18 @@ const PhotosUpload = ({
         <label htmlFor={name}>
           <div></div>
           <Button variant="contained" disableRipple component="label">
-      ファイルアップロード
-      
+            ファイルアップロード
             <input
-            type="file"
-            name={name}
-            id={name}
-            ref={componentRef}
-            accept="image/*"
-            onChange={handleFile}
-            multiple
-            hidden
-          />
+              type="file"
+              name={name}
+              id={name}
+              ref={componentRef}
+              accept="image/*"
+              onChange={handleFile}
+              multiple
+              hidden
+            />
           </Button>
-
-          
         </label>
       </div>
     </>
